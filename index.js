@@ -1,6 +1,7 @@
 'use strict';
 
 const Server = require('./lib/servers/server');
+const Database = require('./lib/database/database');
 
 // load env
 require('dotenv').config();
@@ -15,6 +16,15 @@ const dbConfig = {
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT
 };
+
+const db = new Database(dbConfig);
+db.connection.authenticate()
+.then(() => {
+    console.log('Connection has been established successfully.');
+})
+.catch(err => {
+    console.error('Unable to connect to the database:', err);
+});
 
 const server = new Server();
 
