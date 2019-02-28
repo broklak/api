@@ -2,6 +2,7 @@
 
 const Sequelize = require('sequelize');
 
+const Log = require('./lib/infra/logger');
 const Server = require('./lib/servers/server');
 const Database = require('./lib/database/database');
 const UserModel = require('./lib/modules/user/model/user');
@@ -24,15 +25,16 @@ const dbConfig = {
 const db = new Database(dbConfig);
 db.connection.authenticate()
 .then(() => {
-    console.log('Connection has been established successfully.');
+    Log.i('Connection has been established successfully.');
 })
 .catch(err => {
-    console.error('Unable to connect to the database:', err);
+    Log.e('Unable to connect to the database:');
+    process.exit(1);
 });
 
 db.connection.sync({ force: true })
   .then(() => {
-    console.log(`Database & tables created!`)
+      Log.i(`Database & tables created!`);
   })
 
 const userModel = UserModel(db.connection, Sequelize);
@@ -46,8 +48,8 @@ const server = new Server(handlers);
 
 server.app.listen(PORT, err => {
     if (err) {
-        console.log(`error on startup ${err}`);
+        Log.e(`error on startup ${err}`);
     } else {
-        console.log(`server running on port ${PORT}`);
+        Log.i(`server running on port ${PORT}`);
     }
 });
