@@ -46,15 +46,26 @@ db.connection.sync({ force: true })
 
 // load private key
 const privateKEY = Key.getKeySync('../../config/app.rsa');
+// load public key
+const publicKEY = Key.getKeySync('../../config/app.rsa.pub');
 
 // set jwt options
 const jwtOptions = {
     issuer: "piyelek.github.io",
+    audience: process.env.JWT_AUD_KEY,
     expired: process.env.ACCESS_TOKEN_EXPIRED
 };
 
+// set jwt verify options
+const jwtVerifyOptions = {
+    algorithms: ['RS256'],
+    audience: process.env.JWT_AUD_KEY,
+    issuer: 'piyelek.github.io',
+    clockTolerance: 5
+};
+
 const userModel = UserModel(db.connection, Sequelize);
-const userHandler = UserHandler(userModel, privateKEY, jwtOptions);
+const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions);
 
 const handlers = {
     userHandler: userHandler
