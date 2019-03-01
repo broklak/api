@@ -41,7 +41,6 @@ db.connection.sync({ force: true })
 const privateKEY = Key.getKeySync('../../config/app.rsa');
 const jwtOptions = {
     issuer: "piyelek.github.io",
-    audience: "111", // this should be provided by client
     expired: process.env.ACCESS_TOKEN_EXPIRED
 };
 
