@@ -4,6 +4,7 @@
   "description": "Backend Services with Node",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +25,8 @@
     "on-finished": "^2.3.0",
     "on-headers": "^1.0.2",
     "sequelize": "^4.42.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
   }
 }

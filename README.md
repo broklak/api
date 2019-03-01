@@ -9,7 +9,12 @@
 $ npm install
 ```
 
-- run
+- run dev
+```shell
+$ npm run dev
+```
+
+- run prod
 ```shell
 $ npm start
 ```
