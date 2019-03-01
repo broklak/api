@@ -7,6 +7,7 @@ const Server = require('./lib/servers/server');
 const Database = require('./lib/database/database');
 const UserModel = require('./lib/modules/user/model/user');
 const UserHandler = require('./lib/modules/user/handler/handler');
+const Key = require('./lib/shared/key');
 
 // load env
 require('dotenv').config();
@@ -33,12 +34,19 @@ db.connection.authenticate()
 });
 
 db.connection.sync({ force: true })
-  .then(() => {
+.then(() => {
       Log.i(`Database & tables created!`);
-  })
+});
+
+const privateKEY = Key.getKeySync('../../config/app.rsa');
+const jwtOptions = {
+    issuer: "piyelek.github.io",
+    audience: "111", // this should be provided by client
+    expired: process.env.ACCESS_TOKEN_EXPIRED
+};
 
 const userModel = UserModel(db.connection, Sequelize);
-const userHandler = UserHandler(userModel);
+const userHandler = UserHandler(userModel, privateKEY, jwtOptions);
 
 const handlers = {
     userHandler: userHandler
