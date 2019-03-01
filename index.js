@@ -23,7 +23,10 @@ const dbConfig = {
     port: process.env.DB_PORT
 };
 
+// create database instance
 const db = new Database(dbConfig);
+
+// check database connection
 db.connection.authenticate()
 .then(() => {
     Log.i('Connection has been established successfully.');
@@ -33,12 +36,18 @@ db.connection.authenticate()
     process.exit(1);
 });
 
+
+// Note:
+// please comment this code when running in production
 db.connection.sync({ force: true })
 .then(() => {
       Log.i(`Database & tables created!`);
 });
 
+// load private key
 const privateKEY = Key.getKeySync('../../config/app.rsa');
+
+// set jwt options
 const jwtOptions = {
     issuer: "piyelek.github.io",
     expired: process.env.ACCESS_TOKEN_EXPIRED
@@ -51,8 +60,11 @@ const handlers = {
     userHandler: userHandler
 };
 
+// SERVER
+// create server instance
 const server = new Server(handlers);
 
+// listen server
 server.app.listen(PORT, err => {
     if (err) {
         Log.e(`error on startup ${err}`);
