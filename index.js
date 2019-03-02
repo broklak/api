@@ -1,6 +1,7 @@
 'use strict';
 
 const Sequelize = require('sequelize');
+const Pbkdf2 = require('nodejs-pbkdf2');
 
 const Log = require('./lib/infra/logger');
 const Server = require('./lib/servers/server');
@@ -64,8 +65,18 @@ const jwtVerifyOptions = {
     clockTolerance: 5
 };
 
+//password hasher
+const config = {
+    digestAlgorithm: 'sha1',
+    keyLen: 64,
+    saltSize: 64,
+    iterations: 1000
+  };
+  
+let pbkdf2 = new Pbkdf2(config);
+
 const userModel = UserModel(db.connection, Sequelize);
-const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions);
+const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions, pbkdf2);
 
 const handlers = {
     userHandler: userHandler
