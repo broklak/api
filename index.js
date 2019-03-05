@@ -75,7 +75,7 @@ let pbkdf2 = new Pbkdf2(config);
 const userModel = UserModel(db.connection, Sequelize);
 const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions, pbkdf2);
 
-const authHandler = AuthHandler(userModel, privateKEY, publicKEY, pbkdf2);
+const authHandler = AuthHandler(userModel, privateKEY, jwtOptions, pbkdf2);
 
 const handlers = {
     userHandler,
