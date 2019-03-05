@@ -13,15 +13,17 @@ const Key = require('./lib/shared/key');
 // load env
 require('dotenv').config();
 
+const { env } = process;
+
 // set default PORT
-const PORT = process.env.PORT || 9000;
+const PORT = env.PORT || 9000;
 
 const dbConfig = {
-    dbName: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
+    dbName: env.DB_NAME,
+    host: env.DB_HOST,
+    username: env.DB_USERNAME,
+    password: env.DB_PASSWORD,
+    port: env.DB_PORT
 };
 
 // create database instance
@@ -29,21 +31,15 @@ const db = new Database(dbConfig);
 
 // check database connection
 db.connection.authenticate()
-.then(() => {
-    Log.i('Connection has been established successfully.');
-})
-.catch(err => {
-    Log.e('Unable to connect to the database:');
-    process.exit(1);
-});
+    .then(() => Log.i('Connection has been established successfully.'))
+    .catch((err) => {
+        Log.e('Unable to connect to the database:');
+        process.exit(1);
+    });
 
-
-// Note:
-// please comment this code when running in production
-db.connection.sync({ force: true })
-.then(() => {
-      Log.i(`Database & tables created!`);
-});
+if (env.MIGRATE === 'true') {
+    db.connection.sync({ force: true }).then(() => Log.i(`Database & tables created!`));
+}
 
 // load private key
 const privateKEY = Key.getKeySync('../../config/app.rsa');
@@ -53,14 +49,14 @@ const publicKEY = Key.getKeySync('../../config/app.rsa.pub');
 // set jwt options
 const jwtOptions = {
     issuer: "piyelek.github.io",
-    audience: process.env.JWT_AUD_KEY,
-    expired: process.env.ACCESS_TOKEN_EXPIRED
+    audience: env.JWT_AUD_KEY,
+    expired: env.ACCESS_TOKEN_EXPIRED
 };
 
 // set jwt verify options
 const jwtVerifyOptions = {
     algorithms: ['RS256'],
-    audience: process.env.JWT_AUD_KEY,
+    audience: env.JWT_AUD_KEY,
     issuer: 'piyelek.github.io',
     clockTolerance: 5
 };
@@ -71,8 +67,8 @@ const config = {
     keyLen: 64,
     saltSize: 64,
     iterations: 1000
-  };
-  
+};
+
 let pbkdf2 = new Pbkdf2(config);
 
 const userModel = UserModel(db.connection, Sequelize);
