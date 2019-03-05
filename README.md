@@ -9,6 +9,13 @@
 $ npm install
 ```
 
+#### Unit testing
+```shell
+$ npm run test
+```
+
+#### Running
+
 - run dev
 ```shell
 $ npm run dev
