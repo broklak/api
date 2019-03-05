@@ -8,6 +8,7 @@ const Server = require('./lib/servers/server');
 const Database = require('./lib/database/database');
 const UserModel = require('./lib/modules/user/model');
 const UserHandler = require('./lib/modules/user/handler');
+const AuthHandler = require('./lib/modules/auth/handler');
 const Key = require('./lib/shared/key');
 
 // load env
@@ -74,8 +75,11 @@ let pbkdf2 = new Pbkdf2(config);
 const userModel = UserModel(db.connection, Sequelize);
 const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions, pbkdf2);
 
+const authHandler = AuthHandler(userModel, privateKEY, publicKEY, pbkdf2);
+
 const handlers = {
-    userHandler: userHandler
+    userHandler,
+    authHandler,
 };
 
 // SERVER
@@ -84,9 +88,6 @@ const server = new Server(handlers);
 
 // listen server
 server.app.listen(PORT, err => {
-    if (err) {
-        Log.e(`error on startup ${err}`);
-    } else {
-        Log.i(`server running on port ${PORT}`);
-    }
+    if (err) Log.e(`error on startup ${err}`);
+    else Log.i(`server running on port ${PORT}`);
 });
