@@ -1,0 +1,16 @@
+{
+	"id": "af78d4b0-03c9-4b58-87de-2761acb60018",
+	"name": "Piyelek",
+	"values": [
+		{
+			"key": "url",
+			"value": "",
+			"type": "text",
+			"description": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2019-03-05T09:51:16.772Z",
+	"_postman_exported_using": "Postman/7.0.4"
+}

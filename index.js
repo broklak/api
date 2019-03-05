@@ -6,8 +6,8 @@ const Pbkdf2 = require('nodejs-pbkdf2');
 const Log = require('./lib/infra/logger');
 const Server = require('./lib/servers/server');
 const Database = require('./lib/database/database');
-const UserModel = require('./lib/modules/user/model/user');
-const UserHandler = require('./lib/modules/user/handler/handler');
+const UserModel = require('./lib/modules/user/model');
+const UserHandler = require('./lib/modules/user/handler');
 const Key = require('./lib/shared/key');
 
 // load env
