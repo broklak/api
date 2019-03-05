@@ -6,9 +6,11 @@ const Pbkdf2 = require('nodejs-pbkdf2');
 const Log = require('./lib/infra/logger');
 const Server = require('./lib/servers/server');
 const Database = require('./lib/database/database');
+const AuthHandler = require('./lib/modules/auth/handler');
 const UserModel = require('./lib/modules/user/model');
 const UserHandler = require('./lib/modules/user/handler');
-const AuthHandler = require('./lib/modules/auth/handler');
+const CollegeModel = require('./lib/modules/college/model');
+const CollegeHandler = require('./lib/modules/college/handler');
 const Key = require('./lib/shared/key');
 
 // load env
@@ -75,11 +77,15 @@ let pbkdf2 = new Pbkdf2(config);
 const userModel = UserModel(db.connection, Sequelize);
 const userHandler = UserHandler(userModel, privateKEY, publicKEY, jwtVerifyOptions, jwtOptions, pbkdf2);
 
+const collegeModel = CollegeModel(db.connection, Sequelize);
+const collegeHandler = CollegeHandler(collegeModel, publicKEY, jwtVerifyOptions);
+
 const authHandler = AuthHandler(userModel, privateKEY, jwtOptions, pbkdf2);
 
 const handlers = {
     userHandler,
     authHandler,
+    collegeHandler,
 };
 
 // SERVER
