@@ -3,7 +3,7 @@
 const jwtGen = require('../../lib/shared/jwt_gen');
 const Key = require('../../lib/shared/key');
 
-test('should return valid jwt', ( )=> {
+test('should return valid jwt', () => {
 
     // set jwt options
     const jwtOptions = {
@@ -16,7 +16,7 @@ test('should return valid jwt', ( )=> {
     // load private key
     const privateKEY = Key.getKeySync('../../config/app.rsa');
 
-    const token = jwtGen(privateKEY, {"name": "piyelek"}, jwtOptions);
+    const token = jwtGen(privateKEY, { "name": "piyelek" }, jwtOptions);
 
     expect(token).not.toBe('');
 
